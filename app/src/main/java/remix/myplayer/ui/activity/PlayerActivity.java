@@ -58,6 +58,7 @@ import remix.myplayer.adapter.PagerAdapter;
 import remix.myplayer.bean.mp3.Song;
 import remix.myplayer.helper.UpdateHelper;
 import remix.myplayer.lyric.LrcView;
+import remix.myplayer.lyric.LyricRecyclerView;
 import remix.myplayer.menu.AudioPopupListener;
 import remix.myplayer.misc.handler.MsgHandler;
 import remix.myplayer.misc.handler.OnHandleMessage;
@@ -216,6 +217,7 @@ public class PlayerActivity extends BaseActivity implements UpdateHelper.Callbac
     private Bitmap mRawBitMap;
 
     private Palette.Swatch mSwatch;
+    private LyricRecyclerView mLyricRecyclerView;
 
     @Override
     protected void setUpTheme() {
@@ -597,8 +599,10 @@ public class PlayerActivity extends BaseActivity implements UpdateHelper.Callbac
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 mHandler.sendEmptyMessage(UPDATE_TIME_ONLY);
                 mCurrentTime = progress;
-                if(mLrcView != null)
-                    mLrcView.seekTo(progress,true,fromUser);
+                mLyricRecyclerView.seekTo(progress);
+//                if(mLrcView != null)
+//                    mLrcView.seekTo(progress,true,fromUser);
+
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -755,25 +759,26 @@ public class PlayerActivity extends BaseActivity implements UpdateHelper.Callbac
         mAdapter.addFragment(coverFragment);
         final LyricFragment lyricFragment = new LyricFragment();
         lyricFragment.setOnInflateFinishListener(view -> {
-            mLrcView = (LrcView) view;
-            mLrcView.setOnLrcClickListener(new LrcView.OnLrcClickListener() {
-                @Override
-                public void onClick() {
-                }
-                @Override
-                public void onLongClick() {
-                }
-            });
-            mLrcView.setOnSeekToListener(progress -> {
-                if (progress > 0 && progress < MusicService.getDuration()) {
-                    MusicService.setProgress(progress);
-                    mCurrentTime = progress;
-                    mHandler.sendEmptyMessage(UPDATE_TIME_ALL);
-                }
-            });
-            mLrcView.setHighLightColor(ColorUtil.getColor(ThemeStore.isDay() ? R.color.lrc_highlight_day : R.color.lrc_highlight_night));
-            mLrcView.setOtherColor(ColorUtil.getColor(ThemeStore.isDay() ? R.color.lrc_normal_day : R.color.lrc_normal_night));
-            mLrcView.setTimeLineColor(ColorUtil.getColor(ThemeStore.isDay() ? R.color.lrc_normal_day : R.color.lrc_normal_night));
+            mLyricRecyclerView = (LyricRecyclerView) view;
+//            mLrcView = (LrcView) view;
+//            mLrcView.setOnLrcClickListener(new LrcView.OnLrcClickListener() {
+//                @Override
+//                public void onClick() {
+//                }
+//                @Override
+//                public void onLongClick() {
+//                }
+//            });
+//            mLrcView.setOnSeekToListener(progress -> {
+//                if (progress > 0 && progress < MusicService.getDuration()) {
+//                    MusicService.setProgress(progress);
+//                    mCurrentTime = progress;
+//                    mHandler.sendEmptyMessage(UPDATE_TIME_ALL);
+//                }
+//            });
+//            mLrcView.setHighLightColor(ColorUtil.getColor(ThemeStore.isDay() ? R.color.lrc_highlight_day : R.color.lrc_highlight_night));
+//            mLrcView.setOtherColor(ColorUtil.getColor(ThemeStore.isDay() ? R.color.lrc_normal_day : R.color.lrc_normal_night));
+//            mLrcView.setTimeLineColor(ColorUtil.getColor(ThemeStore.isDay() ? R.color.lrc_normal_day : R.color.lrc_normal_night));
         });
         lyricFragment.setArguments(bundle);
         mAdapter.addFragment(lyricFragment);

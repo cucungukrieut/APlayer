@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import remix.myplayer.adapter.LyricAdapter;
 import remix.myplayer.bean.mp3.Song;
 import remix.myplayer.interfaces.OnInflateFinishListener;
 import remix.myplayer.lyric.LrcView;
+import remix.myplayer.lyric.LyricRecyclerView;
 import remix.myplayer.lyric.SearchLrc;
 import remix.myplayer.lyric.bean.LrcRow;
 import remix.myplayer.util.LogUtil;
@@ -39,7 +39,7 @@ public class LyricFragment extends BaseFragment {
     @BindView(R.id.lrc_view)
     LrcView mLrcView;
     @BindView(R.id.lrc_recyclerview)
-    RecyclerView mLyricRecyclerView;
+    LyricRecyclerView mLyricRecyclerView;
     private LyricAdapter mLyricAdapter;
     //歌词
     private List<LrcRow> mLrcList;
@@ -63,7 +63,7 @@ public class LyricFragment extends BaseFragment {
 
         mUnBinder = ButterKnife.bind(this,rootView);
         if(mOnFindListener != null)
-            mOnFindListener.onViewInflateFinish(mLrcView);
+            mOnFindListener.onViewInflateFinish(mLyricRecyclerView);
         mInfo = getArguments().getParcelable("Song");
 
         mLyricRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
